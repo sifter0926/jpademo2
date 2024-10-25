@@ -10,11 +10,11 @@
             <div th:each="fileDTO:${list}">
                 <div th:if="${fileDTO.image}">
                     <img th:src="|/upload/view/${fileDTO.getLink()}|">
-                    <span><a th:href="@{/upload/remove/${fileDTO.fileName}}">X</a></span>
+                    <span><a th:href="|@{/upload/remove(fileName=${fileDTO.getLink()})}|">X</a></span>
                 </div>
                 <div th:unless="${fileDTO.image}">
                     <span>[[${fileDTO.getLink()}]]</span>
-                    <span><a th:href="@{/uplad/delete/${fileDTO.fileName}}">X</a></span>
+                    <span><a th:href="|@{/upload/remove/(fileName=${fileDTO.getLink()})}|">X</a></span>
                 </div>
             </div>
         </div>

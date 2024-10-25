@@ -83,8 +83,9 @@ public class UpDownController {
         return ResponseEntity.ok().headers(headers).body(resource);
     }
 
-    @GetMapping("/remove/{fileName}")
-    public String removeFile(@PathVariable("fileName") String fileName){
+    @GetMapping("/remove")
+    public String removeFile(@RequestParam("fileName") String fileName){
+        log.info("AAAAA"+fileName);
 
         Resource resource = new FileSystemResource(uploadPath+File.separator + fileName);
         String resourceName = resource.getFilename();
@@ -98,8 +99,9 @@ public class UpDownController {
 
             //섬네일이 존재한다면
             if(contentType.startsWith("image")){
-                File thumbnailFile = new File(uploadPath+File.separator +"s_" + fileName);
-                thumbnailFile.delete();
+                String fileName1=fileName.replace("s_","");
+                File originalFile = new File(uploadPath+File.separator + fileName1);
+                originalFile.delete();
             }
 
         } catch (Exception e) {
