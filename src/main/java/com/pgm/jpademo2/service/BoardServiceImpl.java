@@ -48,17 +48,21 @@ public class BoardServiceImpl implements BoardService{
     public void modify(BoardDTO boardDTO) {
         Optional<Board> result = boardRepository.findById(boardDTO.getBno());
         Board board = result.orElseThrow();
+
         board.change(boardDTO.getTitle(), boardDTO.getContent());
-
-
+        board.clearImages();
+        if(boardDTO.getFileNames()!=null) {
+            for (String fileName : boardDTO.getFileNames()) {
+                String[] arr=fileName.split("_");
+                board.addImage(arr[0], arr[1]);
+            }
+        }
         boardRepository.save(board);
-
     }
 
     @Override
     public void remove(Long bno) {
         boardRepository.deleteById(bno);
-
     }
 
     @Override
@@ -67,17 +71,10 @@ public class BoardServiceImpl implements BoardService{
         String keyword = pageRequestDTO.getKeyword();
         Pageable pageable = pageRequestDTO.getPageable("bno");
         Page<Board> result = boardRepository.searchAll(types,keyword, pageable);
-        //Page<Board> result=null;
-        //Page<Board> result = boardRepository.searchAll(keyword, pageable);
-//        if(types==null|| types.length<1) {
-//            result = boardRepository.findAll(pageable);
-//        }else{
-//            result = boardRepository.searchAll(keyword, pageable);
-//        }
 
         List<BoardDTO> dtoList = result.getContent().stream()
-                .map(board -> modelMapper.map(board,BoardDTO.class)).collect(Collectors.toList());
-
+                .map(board -> modelMapper.map(board,BoardDTO.class))
+                .collect(Collectors.toList());
 
         return PageResponseDTO.<BoardDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
