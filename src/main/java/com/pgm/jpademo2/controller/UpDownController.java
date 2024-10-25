@@ -60,7 +60,7 @@ public class UpDownController {
                 list.add(UploadResultDTO.builder()
                         .uuid(uuid)
                         .fileName(originalName)
-                        .img(image)
+                        .image(image)
                         .build()
                 );
                 model.addAttribute("list", list);
