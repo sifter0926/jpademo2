@@ -21,7 +21,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
 
-@Controller
+//@Controller
 @Log4j2
 @RequestMapping("/upload")
 public class UpDownController {

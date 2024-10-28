@@ -28,6 +28,16 @@
                         <span class="input-group-text">Content</span>
                         <textarea class="form-control col-sm-5" rows="5" readonly>[[${dto.content}]]</textarea>
                     </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">첨부파일</span>
+                        <div class="col" th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
+                            <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap;">
+                                <img class="m-3" th:each="fileName: ${dto.fileNames}"
+                                     th:src="|/board/view/s_${fileName}|">
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="input-group mb-3">
                         <span class="input-group-text">Writer</span>
@@ -115,6 +125,8 @@
                         <input type="text" class="form-control modifyText" >
                     </div>
                 </div>
+
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-info modifyBtn">Modify</button>
                     <button type="button" class="btn btn-danger removeBtn">Remove</button>

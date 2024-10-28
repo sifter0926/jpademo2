@@ -1,10 +1,8 @@
 package com.pgm.jpademo2.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,6 +12,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "imageSet")
 public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +35,8 @@ public class Board extends BaseEntity {
             fetch=FetchType.LAZY,
             cascade = {CascadeType.ALL},
             orphanRemoval = true)
+    @Builder.Default
+    @BatchSize(size = 20)
     private Set<BoardImage> imageSet=new HashSet<>();
 
     public void addImage(String uuid, String fileName){

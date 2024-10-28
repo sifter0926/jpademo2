@@ -15,7 +15,7 @@
                     Board Modify
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/board/modify}" method="post" id="f1">
+                    <form th:action="@{/board/modify}" method="post" enctype="multipart/form-data" id="f1">
                         <div class="input-group mb-3">
                             <span class="input-group-text">Bno</span>
                             <input type="text" class="form-control" th:value="${dto.bno}" name="bno" readonly>
@@ -28,6 +28,22 @@
                         <div class="input-group mb-3">
                             <span class="input-group-text">Content</span>
                             <textarea class="form-control col-sm-5" rows="5" name="content">[[${dto.content}]]</textarea>
+                        </div>
+
+                        <div class="input-group uploadResult mb-3">
+                            <span class="input-group-text">첨부파일</span>
+                            <div class="col" th:if="${dto.fileNames != null && dto.fileNames.size() > 0}">
+                                <div class="container-fluid d-flex" style="flex-wrap: wrap;">
+                                    <img class="m-3" th:each="fileName: ${dto.fileNames}"
+                                         th:src="|/board/view/s_${fileName}|" th:data-src="${fileName}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="uploadHidden"></div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">FileUpload</span>
+                            <input type="file" name="files" class="form-control">
                         </div>
 
                         <div class="input-group mb-3">
@@ -83,6 +99,8 @@
         e.preventDefault()
         e.stopPropagation()
 
+        appendFileData()
+
         formObj.action = `/board/modify?${link}`
         formObj.method ='post'
         formObj.submit()
@@ -90,15 +108,47 @@
 
     }, false)
 
-
     document.querySelector(".removeBtn").addEventListener("click", function(e){
         e.preventDefault()
         e.stopPropagation()
+        appendFileData()
 
         formObj.action = `/board/remove`
         formObj.method ='post'
         formObj.submit()
     }, false)
+
+
+    function appendFileData(){
+        const target = document.querySelector(".uploadHidden")
+        const uploadResult=document.querySelector(".uploadResult")
+        const uploadFiles = uploadResult.querySelectorAll("img")
+
+        let str = ''
+
+        for (let i = 0; i < uploadFiles.length ; i++) {
+            const uploadFile = uploadFiles[i]
+            const imgLink = uploadFile.getAttribute("data-src")
+            str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+        }
+        target.innerHTML = str;
+    }
+
+    // function appendFileData(){
+    //     const target=document.querySelector(".uploadHidden")
+    //     const uploadResult=document.querySelector(".uploadResult")
+    //     const uploadFiles=uploadResult.querySelector("img")
+    //
+    //     let str=''
+    //     for(let i=0; i<uploadFiles.length; i++){
+    //         const uploadFile=uploadFiles[i]
+    //         const imgLink=uploadFile.getAttribute("data-src")
+    //
+    //
+    //         str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+    //     }
+    //     target.innerHTML=str;
+    // }
 
     document.querySelector(".listBtn").addEventListener("click", function(e){
         e.preventDefault()
